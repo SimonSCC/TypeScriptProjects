@@ -1,0 +1,31 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <h1 class="HeadLine">Draw Stuff</h1>
+    <div class="mainContent">
+    <div>
+        <span>Select figure to draw</span>
+        <select id="selectDropdown">
+            <option value="Default">Default</option>
+                <option value="Rectangle">Rectangle</option>
+                <option value="Circle">Circle</option>
+                <option value="Triangle">Triangle</option>
+        </select>
+    </div>
+    <br>
+    <div id="OptionsForFigure">
+        <!-- <input type="number"> -->
+    </div>
+    <br>
+    <canvas id="myCanvas" height="250" width="250" style="border: 1px solid black;"></canvas>
+    <!-- <button id="clear">Clear</button> -->
+</div>
+</body>
+
+<script src="./../dist/index.js"></script>
+</html>
