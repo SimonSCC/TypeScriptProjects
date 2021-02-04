@@ -29,20 +29,39 @@ var Triangle = /** @class */ (function () {
         var heightSetting = document.createElement("Input"); //The <> is the same as if i cast it like " as HTMLInputElement"
         heightSetting.type = "number";
         heightSetting.value = this.Height.toString();
+        heightSetting.addEventListener("change", function () {
+            triangle.Height = parseInt(heightSetting.value);
+            triangle.draw();
+        });
         this.SettingsLocation.appendChild(heightSetting);
+        this.SettingsLocation.appendChild(document.createElement("br"));
+        var widthLabel = document.createElement("span");
+        widthLabel.innerHTML = "Width";
+        this.SettingsLocation.appendChild(widthLabel);
+        var widthSetting = document.createElement("Input");
+        widthSetting.type = "number";
+        widthSetting.value = this.Width.toString();
+        widthSetting.addEventListener("change", function () {
+            triangle.Width = parseInt(widthSetting.value);
+            triangle.draw();
+        });
+        this.SettingsLocation.appendChild(widthSetting);
     };
     Triangle.prototype.draw = function () {
-        // this.Context.clearRect(0, 0, this.Canvas.width, this.Canvas.height);
+        this.Context.clearRect(0, 0, this.Width + 100, this.Height + 15); //Clear only this triangle
         this.Context.beginPath();
         this.Context.moveTo(100, 15);
-        this.Context.lineTo(this.Width + 100, 15);
-        this.Context.lineTo(this.Width * 1.5 + 100 / 2, this.Height + 15);
+        // this.Context.lineTo(this.Width + 100, 15);
+        // this.Context.lineTo(this.Width * 1.5 + 100 / 2, this.Height + 15)
+        this.Context.lineTo(this.Width, this.Height);
+        this.Context.lineTo(this.Width / 2, this.Height);
         this.Context.closePath(); //This draws line to beginning
         this.Context.fillStyle = 'green';
         this.Context.fill();
     };
     return Triangle;
 }());
+// 
 var Rectangle = /** @class */ (function () {
     function Rectangle(height, width, canvas, settingsLoc) {
         // super(context);
@@ -53,10 +72,32 @@ var Rectangle = /** @class */ (function () {
         this.Width = width;
     }
     Rectangle.prototype.spawnSettings = function () {
-        throw new Error("Method not implemented.");
+        var heightLabel = document.createElement("span");
+        heightLabel.innerHTML = "Height ";
+        this.SettingsLocation.appendChild(heightLabel);
+        var heightSetting = document.createElement("Input"); //The <> is the same as if i cast it like " as HTMLInputElement"
+        heightSetting.type = "number";
+        heightSetting.value = this.Height.toString();
+        heightSetting.addEventListener("change", function () {
+            rectangle.Height = parseInt(heightSetting.value);
+            rectangle.draw();
+        });
+        this.SettingsLocation.appendChild(heightSetting);
+        this.SettingsLocation.appendChild(document.createElement("br"));
+        var widthLabel = document.createElement("span");
+        widthLabel.innerHTML = "Width";
+        this.SettingsLocation.appendChild(widthLabel);
+        var widthSetting = document.createElement("Input");
+        widthSetting.type = "number";
+        widthSetting.value = this.Width.toString();
+        widthSetting.addEventListener("change", function () {
+            rectangle.Width = parseInt(widthSetting.value);
+            rectangle.draw();
+        });
+        this.SettingsLocation.appendChild(widthSetting);
     };
     Rectangle.prototype.draw = function () {
-        this.Context.clearRect(15, 15, this.Width, this.Height);
+        this.Context.clearRect(15, 15, this.Width + 15, this.Height + 15);
         this.Context.beginPath();
         this.Context.rect(15, 15, this.Width, this.Height);
         this.Context.closePath();
@@ -109,29 +150,47 @@ var FigureFactory = /** @class */ (function () {
 // }
 var factory = new FigureFactory();
 var selectElem = document.getElementById('selectDropdown');
+// let listOfActiveFigure : IFigure[] = [];
+var triangle;
+var rectangle;
+var circle;
 selectElem.addEventListener("change", function () {
-    removeAllChildNodes(document.getElementById("OptionsForFigure")); //removes children from options
+    removeOptions();
     var value = selectElem.value;
     console.log("On Change event called " + value);
     switch (value) {
         case "Rectangle":
             console.log("Drawing Rectangle");
-            factory.createRectangle(25, 50).draw();
+            var rect = factory.createRectangle(25, 50);
+            rectangle = rect;
+            rect.draw();
+            rect.spawnSettings();
+            // if(listOfActiveFigure.includes())
+            // {
+            //     console.log("True, contains rect");
+            // }
+            //    listOfActiveFigure.push(rect);
             break;
         case "Circle":
+            var myCircle = factory.createCircle(50);
+            circle = myCircle;
             console.log("Drawing Circle");
-            factory.createCircle(50).draw();
+            myCircle.draw();
             break;
         case "Triangle":
             console.log("Drawing Triangle");
-            var triangle = factory.createTriangle(25, 50);
-            triangle.draw();
-            triangle.spawnSettings();
+            var triang = factory.createTriangle(100, 150);
+            triang.draw();
+            triang.spawnSettings();
+            triangle = triang;
             break;
         default:
             break;
     }
 });
+function removeOptions() {
+    removeAllChildNodes(document.getElementById("OptionsForFigure")); //removes children from options
+}
 function removeAllChildNodes(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
@@ -141,9 +200,30 @@ document.getElementById('clearBtn').addEventListener('click', function () {
     var canvas = document.getElementById("myCanvas");
     var context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.height, canvas.width);
-    var selectElem = document.getElementById('selectDropDown');
-    selectElem.selectedIndex = 1;
+    var selectElem = document.getElementById('selectDropdown');
+    selectElem.selectedIndex = 0;
+    removeOptions();
+    triangle = null;
+    rectangle = null;
+    circle = null;
 });
 // Main();
 //The reason why it wouldn't delete with         this.Context.clearRect(0, 0, this.Canvas.width, this.Canvas.height);
 // was that I hadn't used ctx.beginpath(); and endpath
+// function heightChanged(typeOfFigure : string, newHeight : number)
+// {
+//     console.log("height changed" + newHeight);
+//     switch (typeOfFigure) {
+//         case "Triangle":
+//            let asTriangle = triangle as Triangle;
+//            asTriangle.Height = newHeight; 
+//            asTriangle.draw();
+//             break;
+//     case "Rectangle":
+//         let asRect = rectangle as Rectangle;
+//         asRect.Height = newHeight;
+//         asRect.draw();
+//         default:
+//             break;
+//     }
+// }
