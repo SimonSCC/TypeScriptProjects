@@ -1,4 +1,26 @@
 "use strict";
+var FigureFactory = /** @class */ (function () {
+    function FigureFactory() {
+        this.CanvasElem = document.getElementById("myCanvas");
+        this.SettingsForFigure = document.getElementById("OptionsForFigure");
+    }
+    FigureFactory.prototype.createRectangle = function (height, width) {
+        return new Rectangle(height, width, this.CanvasElem, this.SettingsForFigure);
+    };
+    FigureFactory.prototype.createCircle = function (radius) {
+        return new Circle(radius, this.CanvasElem, this.SettingsForFigure);
+    };
+    FigureFactory.prototype.createTriangle = function (height, width) {
+        return new Triangle(height, width, this.CanvasElem, this.SettingsForFigure);
+    };
+    return FigureFactory;
+}());
+var factory = new FigureFactory();
+var selectElem = document.getElementById('selectDropdown');
+var triangle;
+var rectangle;
+var circle;
+// let listOfActiveFigure : IFigure[] = [];
 // class Figure implements IFigure
 // {
 //     Context: CanvasRenderingContext2D;
@@ -126,34 +148,6 @@ var Circle = /** @class */ (function () {
     };
     return Circle;
 }());
-var FigureFactory = /** @class */ (function () {
-    function FigureFactory() {
-        this.CanvasElem = document.getElementById("myCanvas");
-        this.SettingsForFigure = document.getElementById("OptionsForFigure");
-    }
-    FigureFactory.prototype.createRectangle = function (height, width) {
-        return new Rectangle(height, width, this.CanvasElem, this.SettingsForFigure);
-    };
-    FigureFactory.prototype.createCircle = function (radius) {
-        return new Circle(radius, this.CanvasElem, this.SettingsForFigure);
-    };
-    FigureFactory.prototype.createTriangle = function (height, width) {
-        return new Triangle(height, width, this.CanvasElem, this.SettingsForFigure);
-    };
-    return FigureFactory;
-}());
-// function Main()
-// {
-//     console.log("Initiating JS");  
-//     // factory.createCircle(5).draw(); // Circle not working 
-//     // factory.createRectangle(25, 50).draw();
-// }
-var factory = new FigureFactory();
-var selectElem = document.getElementById('selectDropdown');
-// let listOfActiveFigure : IFigure[] = [];
-var triangle;
-var rectangle;
-var circle;
 selectElem.addEventListener("change", function () {
     removeOptions();
     var value = selectElem.value;

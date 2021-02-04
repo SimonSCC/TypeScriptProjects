@@ -1,8 +1,34 @@
+
+
 interface IFigureFactory {
     CanvasElem: HTMLCanvasElement;
+    SettingsForFigure : HTMLElement;
     createRectangle(height: number, width: number): IFigure;
     createCircle(radius: number): IFigure;
     createTriangle(height: number, width: number): IFigure;
+}
+
+class FigureFactory implements IFigureFactory {
+    CanvasElem: HTMLCanvasElement;
+    SettingsForFigure: HTMLElement;
+
+    constructor() {
+        this.CanvasElem = document.getElementById("myCanvas") as HTMLCanvasElement;
+        this.SettingsForFigure = document.getElementById("OptionsForFigure") !;
+    }
+
+    createRectangle(height: number, width: number): IFigure {
+        return new Rectangle(height, width, this.CanvasElem, this.SettingsForFigure);
+    }
+    createCircle(radius: number): IFigure {
+        return new Circle(radius, this.CanvasElem, this.SettingsForFigure);
+    }
+    createTriangle(height: number, width: number): IFigure {
+        return new Triangle(height, width, this.CanvasElem, this.SettingsForFigure);
+    }
+
+
+
 }
 
 interface IFigure {
@@ -11,6 +37,15 @@ interface IFigure {
     draw(): void;
     spawnSettings(): void;
 }
+
+const factory = new FigureFactory();
+const selectElem = document.getElementById('selectDropdown') !as HTMLSelectElement;
+let triangle : IFigure | null;
+let rectangle : IFigure | null;
+let circle : IFigure | null;
+// let listOfActiveFigure : IFigure[] = [];
+
+
 
 // class Figure implements IFigure
 // {
@@ -187,44 +222,11 @@ class Circle implements IFigure {
 
 }
 
-class FigureFactory implements IFigureFactory {
-    CanvasElem: HTMLCanvasElement;
-    SettingsForFigure: HTMLElement;
-
-    constructor() {
-        this.CanvasElem = document.getElementById("myCanvas") as HTMLCanvasElement;
-        this.SettingsForFigure = document.getElementById("OptionsForFigure") !;
-    }
-
-    createRectangle(height: number, width: number): IFigure {
-        return new Rectangle(height, width, this.CanvasElem, this.SettingsForFigure);
-    }
-    createCircle(radius: number): IFigure {
-        return new Circle(radius, this.CanvasElem, this.SettingsForFigure);
-    }
-    createTriangle(height: number, width: number): IFigure {
-        return new Triangle(height, width, this.CanvasElem, this.SettingsForFigure);
-    }
 
 
 
-}
 
-// function Main()
-// {
-//     console.log("Initiating JS");  
 
-//     // factory.createCircle(5).draw(); // Circle not working 
-//     // factory.createRectangle(25, 50).draw();
-
-// }
-
-const factory = new FigureFactory();
-const selectElem = document.getElementById('selectDropdown') !as HTMLSelectElement;
-// let listOfActiveFigure : IFigure[] = [];
-let triangle : IFigure | null;
-let rectangle : IFigure | null;
-let circle : IFigure | null;
 
 
 selectElem.addEventListener("change", function (): void {
